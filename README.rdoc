@@ -1,0 +1,3 @@
+= bbbot-ruby
+
+Ruby wrapper for {bbbot}[https://github.com/mconf/bbbot].
