@@ -1,5 +1,5 @@
 class BigBlueButtonBot
-  BOT_FILENAME = "../extras/bbb-bot.jar"
+  BOT_FILENAME = "../extras/bbbot.jar"
   @@pids = []
 
   # Starts the bot. Wait until the meeting is started (will check for it using the BBB API)
