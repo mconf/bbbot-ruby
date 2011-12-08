@@ -10,6 +10,6 @@ Mainly in the integration tests for these two gems: {bigbluebutton-api-ruby}[htt
 
 == Some more information
 
-A meeting in BigBlueButton (BBB) will only be running after the first user establishes a RTMP connection with the server. To establish this connection, this gem uses the bbbot, a java application implemented with the same base libraries used in the {BigBlueButton Android client}[https://github.com/mconf/mconf-mobile]. This bot is still in early stages of development, but it can already properly join a meeting.
+A meeting in BigBlueButton (BBB) will only be running after the first user establishes a RTMP connection with the server. To establish this connection, this gem uses bbbot, a java application implemented with the same base libraries used in the {BigBlueButton Android client}[https://github.com/mconf/mconf-mobile]. This bot is still in early stages of development, but it can already properly join a meeting.
 
-So, to use this gem *your BBB server needs support to the mobile client*. In BBB 0.8 the support is already available in a standard installation, you just need to set the mobile_salt in features/conf.yml. For earlier versions of BigBlueButton you need to install it manually (it's very simple). See: http://code.google.com/p/mconf/wiki/MconfMobile for more information.
+So, to use this gem <b>your BBB server needs support to the mobile client</b>. In BBB 0.8 the support is already available in a standard installation, you just need to set the mobile_salt in features/conf.yml. For earlier versions of BigBlueButton you need to install it manually (it's very simple). See: http://code.google.com/p/mconf/wiki/MconfMobile for more information.
