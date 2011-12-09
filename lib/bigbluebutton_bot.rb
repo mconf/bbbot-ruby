@@ -4,8 +4,7 @@ class BigBlueButtonBot
 
   # Starts the bot. Wait until the meeting is started (will check for it using the BBB API)
   # or until the timeout expires.
-  # api::      BigBlueButtonApi object to access the server. See bigbluebutton-api-ruby. If not
-  #            informed, will always wait for 'timeout' seconds.
+  # api::      BigBlueButtonApi object to access the server. See the gem bigbluebutton-api-ruby.
   # meeting::  ID of the meeting that the bot should join
   # count::    Number of bots to start
   # timeout::  Maximum time waiting for the meeting to be started (in secs).
