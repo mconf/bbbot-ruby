@@ -23,18 +23,24 @@ class BigBlueButtonBot
       # exec("java -jar #{bot_file} -s \"#{server}\" -m \"#{meeting}\" -n #{count} >/dev/null")
       # Process.exit!
     end
-    @@pids << pid
+    @@pids << [meeting, pid]
 
     wait_bot_startup(api, meeting, count, timeout)
   end
 
   # Kill the processes running the bots
-  def self.finalize
-    @@pids.each do |pid|
-      p = Process.kill("TERM", pid)
-      Process.detach(pid)
+  def self.finalize(meeting=nil)
+    @@pids.each do |this_meeting, pid|
+      if meeting.nil? or this_meeting == meeting
+        p = Process.kill("TERM", pid)
+        Process.detach(pid)
+      end
     end
-    @@pids.clear
+    if meeting.nil?
+      @@pids.clear
+    else
+      @@pids.delete_if{ |this_meeting, pid| this_meeting ==meeting }
+    end
   end
 
   protected
