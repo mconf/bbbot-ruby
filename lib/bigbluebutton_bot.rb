@@ -15,7 +15,13 @@ class BigBlueButtonBot
     # and be able to wait for it (kill it) later on (see BigBlueButtonBot.finalize)
     pid = Process.fork do
       bot_file = File.join(File.dirname(__FILE__), BOT_FILENAME)
-      exec("java", "-jar", "#{bot_file}", "-s", "#{server}", "-p", "#{salt}", "-m", "#{meeting}", "-n", "#{count}")
+      exec("java",
+           "-jar", "#{bot_file}",
+           "--single_meeting", "true",
+           "--server", "#{server}",
+           "--key", "#{salt}",
+           "--meeting", "#{meeting}",
+           "--numbots", "#{count}")
 
       # other options that didn't work:
       # IO::popen("java -jar #{bot_file} -s \"#{server}\" -m \"#{meeting}\" -n #{count} >/dev/null")
