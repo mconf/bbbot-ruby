@@ -38,14 +38,14 @@ class BigBlueButtonBot
   def self.finalize(meeting=nil)
     @@pids.each do |this_meeting, pid|
       if meeting.nil? or this_meeting == meeting
-        p = Process.kill("TERM", pid)
+        Process.kill("TERM", pid)
         Process.detach(pid)
       end
     end
     if meeting.nil?
       @@pids.clear
     else
-      @@pids.delete_if{ |this_meeting, pid| this_meeting ==meeting }
+      @@pids.delete_if{ |this_meeting, pid| this_meeting == meeting }
     end
   end
 
@@ -74,7 +74,7 @@ class BigBlueButtonBot
         # find the meeting and hope it is running
         response = api.get_meetings
         selected = response[:meetings].reject!{ |m| m[:meetingID] != meeting }
-        if selected and selected.size > 0 and selected[0][:running]
+        if selected and selected.size > 0
 
           # check how many participants are in the meeting
           pass = selected[0][:moderatorPW]
