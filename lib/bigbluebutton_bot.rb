@@ -1,5 +1,7 @@
 class BigBlueButtonBot
   BOT_FILENAME = "../extras/bbbot.jar"
+  LOG_FILENAME = "../extras/log4j.properties"
+  LOG_DEBUG_FILENAME = "../extras/log4j.debug.properties"
   @@pids = []
 
   # Starts the bot. Wait until the meeting is started (will check for it using the BBB API)
@@ -15,13 +17,22 @@ class BigBlueButtonBot
     # and be able to wait for it (kill it) later on (see BigBlueButtonBot.finalize)
     pid = Process.fork do
       bot_file = File.join(File.dirname(__FILE__), BOT_FILENAME)
-      exec("java",
-           "-jar", "#{bot_file}",
-           "--single_meeting", "true",
-           "--server", "#{server}",
-           "--key", "#{salt}",
-           "--meeting", "#{meeting}",
-           "--numbots", "#{count}")
+      if ENV['DEBUG']
+        log_file = File.join(File.dirname(__FILE__), LOG_DEBUG_FILENAME)
+      else
+        log_file = File.join(File.dirname(__FILE__), LOG_FILENAME)
+      end
+
+      command = ["java",
+                 "-Dlog4j.configuration=file:#{log_file}",
+                 "-jar", "#{bot_file}",
+                 "--single_meeting", "true",
+                 "--server", "#{server}",
+                 "--key", "#{salt}",
+                 "--meeting", "#{meeting}",
+                 "--numbots", "#{count}"]
+      logger(command.join(" "))
+      exec(*command)
 
       # other options that didn't work:
       # IO::popen("java -jar #{bot_file} -s \"#{server}\" -m \"#{meeting}\" -n #{count} >/dev/null")
@@ -67,21 +78,30 @@ class BigBlueButtonBot
   # timeout::      Maximum wait time in seconds
   def wait_bot_startup(api, meeting, participants, timeout=20)
     Timeout::timeout(timeout) do
+      logger("waiting for meeting #{meeting} with #{participants} participants")
       stop_wait = false
       while !stop_wait
         sleep 1
 
         # find the meeting and hope it is running
         response = api.get_meetings
+        logger("response from getMeetings: #{response.inspect}")
         selected = response[:meetings].reject!{ |m| m[:meetingID] != meeting }
         if selected and selected.size > 0
+          logger("found the target meeting!")
 
           # check how many participants are in the meeting
           pass = selected[0][:moderatorPW]
           response = api.get_meeting_info(meeting, pass)
+          logger("response from getMeetingInfo: #{response.inspect}")
           stop_wait = response[:participantCount] >= participants
+          logger("was the number of participants reached? #{stop_wait}")
         end
       end
     end
+  end
+
+  def logger(msg)
+    puts "BigBlueButtonBot: #{msg}" if ENV['DEBUG']
   end
 end
