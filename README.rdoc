@@ -18,7 +18,7 @@ So, to use this gem <b>your BBB server needs support to the mobile client</b>. I
 
 == Usage example
 
-The java application that creates the bots is called when you instantiate a BigBlueButtonBot. The meeting that the bot will join must be already created.
+The java application that creates the bots is called when you instantiate a <tt>BigBlueButtonBot</tt>. The meeting that the bot will join must be already created.
 
   api = BigBlueButton::BigBlueButtonApi.new("http://server.com/bigbluebutton/api", "my-secret-salt", "0.8")
   BigBlueButtonBot.new(api, "meeting-id", "03b07", 2, 60)
@@ -26,3 +26,12 @@ The java application that creates the bots is called when you instantiate a BigB
 And to stop the bots (it sends a SIGTERM signal to the processes):
 
   BigBlueButtonBot.finalize
+
+
+=== Print debug information
+
+By default the bot will *not* print any information to stdout. To do so, set the environment variable <tt>DEBUG</tt> when running your application.
+
+So, for instance, if you're calling <tt>bbbot-ruby</tt> inside a script called <tt>run-bot.rb</tt>, you should run it with:
+
+  ruby run-bot.rb DEBUG=1
